@@ -1,0 +1,20 @@
+{
+  "name": "top-100",
+  "version": "1.0.0",
+  "description": "Alexa top 100 stats",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Evan Simpson <evan@technical.io>",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.1.5",
+    "cheerio": "^0.22.0",
+    "express": "^4.15.2",
+    "nedb": "^1.8.0",
+    "pug": "^2.0.0-beta11",
+    "request": "^2.81.0",
+    "xregexp": "^3.1.1"
+  }
+}
