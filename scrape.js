@@ -18,8 +18,12 @@ function countWords(textString) {
     }).length; // return number of words left
 }
 
-function getWordCount(node) {
-  if (node.tagName.toLowerCase() == 'script') {
+function getWordCount(node, url) {
+  if (typeof node == 'undefined') {
+    return 0;
+  }
+  if (typeof node.tagName == 'string' &&
+    node.tagName.toLowerCase() == 'script') {
     // if a script tag got through, ignore it
     return 0;
   } else if ( node.type == 'text') {
@@ -40,20 +44,29 @@ function getWordCount(node) {
 
 function scrape(url) {
   timer.time(url);
-  request(url, function(err, res, body) {
-    if (err) {
-      // TODO
-      console.log(err);
-    } else {
-      console.log(res.headers);
-      var noScript = cheerio.load(body)('body') // grab the body node
-        .find('script')
-          .remove() // remove all script tags
-        .end();
-      var wordCound = getWordCount(noScript[0]);
-      var runTime = timer.time(url);
-      console.log(url, wordCound, timer.formatTime(runTime));
-    }
+  return new Promise(function(resolve, reject) {
+    // need to set a timeout since some sites can take minutes
+    request(url, {timeout: 5000}, function(err, res, body) {
+      if (err) {
+        // add the run time to the err object and reject the promise
+        err.time = timer.time(url);
+        return reject(err);
+      } else {
+        // create and populate a custom response object
+        // includes headers, word count, and run time
+        var response = {
+          headers: res.headers
+        };
+        var noScriptBody = cheerio.load(body)('body') // grab the body node
+          .find('script')
+            .remove() // remove all script tags
+          .end();
+        response.wordCount = getWordCount(noScriptBody[0]);
+        response.runTime = timer.time(url);
+        // resolve the promise with the response data
+        resolve(response);
+      }
+    });
   });
 }
 
