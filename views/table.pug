@@ -1,0 +1,11 @@
+table.table.table-striped
+  thead
+    tr
+      each label in labels
+        th= label
+  tbody
+    each item, index in data
+      tr
+        td= index+1
+        each label in data_labels
+          td= item[label]

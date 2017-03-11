@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+    title Alexa Top Sites Stats
+    link(rel='stylesheet'
+      href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+  body
+    .navbar.navbar-default
+      .container
+        ul.nav.navbar-nav
+          if page=='home'
+            li.active
+              a(href="/") Home
+            li
+              a(href="/headers") Header Stats
+          else
+            li
+              a(href="/") Home
+            li.active
+              a(href="/headers") Header Stats
+        form.navbar-form.navbar-right#refresh-form(action="/refresh" method="post")
+          button.btn.btn-success#refresh-button(type="submit") Refresh Data
+    .container
+
+      include stats.pug
+      h2= heading
+      include table.pug
+    script(type='text/javascript' src='/client.js')
